@@ -1,0 +1,63 @@
+The App Router (modern Next.js 13+)
+
+This is the recommended way. You’ll see an app/ folder.
+Every folder inside app/ is a URL segment. Files inside control how the page renders.
+
+my-app/
+├─ app/
+│  ├─ page.tsx                 // the homepage: "/"
+│  ├─ layout.tsx               // wrapper for all pages (header/footer)
+│  ├─ about/
+│  │  ├─ page.tsx              // "/about"
+│  │  └─ layout.tsx            // wrapper only for /about subtree (optional)
+│  ├─ blog/
+│  │  ├─ page.tsx              // "/blog"
+│  │  ├─ [slug]/               // dynamic segment → "/blog/hello-world"
+│  │  │  ├─ page.tsx
+│  │  │  └─ loading.tsx        // skeleton while data loads (optional)
+│  │  └─ loading.tsx
+
+
+1. What if we put everything in src/page.js?
+
+You could technically make one big component in src/page.js and show your whole site there.
+But… then your homepage, about page, blog, contact page etc. would all be in one file.
+
+That means:
+No proper URLs (/about, /blog/123 won’t work).
+Hard to manage as app grows.
+Users can’t bookmark/share specific pages.
+SEO (Google ranking) suffers because there’s no clear page structure.
+
+👉 So yes, you can do it, but it quickly becomes a mess.
+
+2. Why Next.js uses page.tsx in every folder
+Think of the app/ folder as a map of your website:
+
+app/
+├─ page.tsx          → "/"
+├─ about/
+│  └─ page.tsx       → "/about"
+├─ blog/
+│  ├─ page.tsx       → "/blog"
+│  └─ [slug]/
+│     └─ page.tsx    → "/blog/anything-here"
+
+
+Each page.tsx = one route (URL).
+The folder path = the URL path.
+Next.js automatically sets up routing for you — no react-router needed, no manual route config.
+
+3. Why not just import components instead?
+Example:
+If you put everything in src/page.js, then to visit /about you’d have to write a custom router, like in normal React apps (react-router-dom).
+
+But in Next.js:
+about/page.tsx → automatically becomes /about.
+
+Inside about/page.tsx, you can import your components (e.g., Navbar, Footer, AboutContent).
+So page.tsx is not where you write all the code, it’s just the entry point that renders components.
+
+
+src/app/BlogoApp/addBlog/page.jsx -> This is the folder structure of addBlog page
+src/app/BlogoApp/context/BlogContext.jsx -> folder structure for BlogContext file

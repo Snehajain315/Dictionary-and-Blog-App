@@ -1,0 +1,172 @@
+1. Static Routes:- A route that always points to the same page.
+
+Example:
+app/
+├─ page.tsx         → "/"
+├─ about/
+│  └─ page.tsx      → "/about"
+├─ contact/
+│  └─ page.tsx      → "/contact"
+
+/ → HomePage
+/about → AboutPage
+/contact → ContactPage
+
+👉 Always the same, no dynamic values.
+---------------------------------------------------------------------------------------------------------
+
+🔹 2. Dynamic Routes:- When the URL changes based on a variable (like id, slug).
+
+Syntax: [param]
+Example:
+app/
+└─ blog/
+   ├─ page.tsx        → "/blog"
+   └─ [slug]/
+      └─ page.tsx     → "/blog/:slug"
+
+/blog/hello-world → shows post with slug = "hello-world"
+/blog/nextjs-guide → shows post with slug = "nextjs-guide"
+
+👉 Used for blogs, user profiles, product details, etc.
+-----------------------------------------------------------------------------------------------------------
+
+🔹 6. Nested Routes:- You can create routes inside routes by nesting folders.
+
+Example:
+app/
+└─ dashboard/
+   ├─ page.tsx        → "/dashboard"
+   ├─ settings/
+   │  └─ page.tsx     → "/dashboard/settings"
+   └─ users/
+      └─ [id]/
+         └─ page.tsx  → "/dashboard/users/:id"
+
+
+👉 Very common for admin panels, dashboards.
+
+-------------------------------------------------------------------------------------------------------------------
+
+🔹 3. Catch-All Routes:- When you don’t know how many segments will come.
+
+Syntax: [...param]
+Example:
+app/
+└─ docs/
+   └─ [...slug]/
+      └─ page.tsx   → "/docs/*"
+
+/docs → empty array []
+/docs/getting-started → slug = ["getting-started"]
+/docs/guides/setup/first-step → slug = ["guides", "setup", "first-step"]
+
+👉 Useful for docs, breadcrumbs, nested categories.
+
+------------------------------------------------------------------------------------------------------------
+
+🔹 4. Optional Catch-All Routes:- Like catch-all, but the parameter can also be missing.
+
+Syntax: [[...param]]
+Example:
+app/
+└─ shop/
+   └─ [[...filters]]/
+      └─ page.tsx
+
+
+/shop → filters = []
+/shop/clothes → filters = ["clothes"]
+/shop/clothes/men → filters = ["clothes", "men"]
+
+👉 Nice for filtering/search pages.
+---------------------------------------------------------------------------------------------------------------
+
+🔹 5. Route Groups:- Group folders just for organization, but they don’t appear in the URL.
+
+Syntax: (groupName)
+Example:
+app/
+└─ (marketing)/
+   ├─ about/
+   │  └─ page.tsx   → "/about"
+   ├─ contact/
+   │  └─ page.tsx   → "/contact"
+
+
+URL is still /about, /contact
+(marketing) is ignored in the URL, only for folder structure.
+
+👉 Helps organize large projects.
+-------------------------------------------------------------------------------------------------------------------
+
+🔹 7. Parallel Routes (advanced 🚀):- Used to render multiple pages at the same time in different slots.
+
+Syntax: @slotName
+Example:
+app/
+└─ dashboard/
+   ├─ @analytics/
+   │  └─ page.tsx
+   ├─ @team/
+   │  └─ page.tsx
+   └─ layout.tsx
+
+
+layout.tsx defines 2 slots (<Slot name="analytics" /> and <Slot name="team" />).
+Both analytics/page.tsx and team/page.tsx render side by side.
+
+👉 Useful for dashboards (charts + lists showing together).
+
+-------------------------------------------------------------------------------------------------------------------
+
+🔹 8. Intercepting Routes (advanced 🚀):- Let you show a page inside another page’s context (like a modal).
+
+Syntax: (.), (..), (...)
+
+Example:
+app/
+└─ feed/
+   ├─ page.tsx       → "/feed"
+   └─ @modal/
+      └─ (.)photo/
+         └─ page.tsx → "/feed/photo/:id"
+
+
+Clicking a photo in /feed shows it as a modal, without leaving /feed.
+
+👉 Great for Instagram/Twitter-style modals.
+
+-------------------------------------------------------------------------------------------------------------------
+
+🔹 9. API Routes (backend in Next.js):- Server-side routes for backend logic.
+
+Example:
+app/
+└─ api/
+   └─ posts/
+      └─ route.ts
+
+// app/api/posts/route.ts
+export async function GET() {
+  return Response.json([{ id: 1, title: "Hello World" }]);
+}
+
+
+/api/posts → returns JSON
+Can handle GET, POST, PUT, DELETE
+Used for databases, auth, server logic.
+
+-------------------------------------------------------------------------------------------------------------------
+
+✅ Summary
+
+Static → /about
+Dynamic → /blog/[slug]
+Catch-all → /docs/[...slug]
+Optional catch-all → /shop/[[...filters]]
+Route groups → (marketing)/about → /about
+Nested → /dashboard/settings
+Parallel → multiple slots (@analytics, @team)
+Intercepting → modals (.)photo
+API routes → /api/...
