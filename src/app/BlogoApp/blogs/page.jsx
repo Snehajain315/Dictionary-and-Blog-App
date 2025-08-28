@@ -1,8 +1,10 @@
 "use client"
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
+  const router= useRouter();
 
   useEffect(() => {
     const savedBlogs = localStorage.getItem("blog");
@@ -28,7 +30,7 @@ export default function Blogs() {
           <div className="space-y-6">
             {blogs.map((e, i) => (
               <div 
-                key={i} 
+                key={e.id} 
                 className="bg-white rounded-lg shadow-md p-6 border border-gray-200 hover:shadow-lg transition-shadow duration-300"
               >
                 <h2 className="text-2xl font-semibold text-gray-800 mb-3">
@@ -41,6 +43,7 @@ export default function Blogs() {
                <div style={{display:"flex", columnGap:"10px", margin:"10px auto"}}>
                 <button 
                  className="px-4 py-2 bg-blue-400 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors duration-200 shadow-md hover:shadow-lg active:scale-95 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                 onClick={()=>router.push(`/BlogoApp/blogs/${e.id}`)}
                 >Details
                 </button>
 

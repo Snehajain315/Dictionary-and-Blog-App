@@ -1,7 +1,11 @@
 'use client'
 import React from "react";
 
+//import Script from "next/script";
+
 export default function AboutBlog(){
+
+    
     return(
         <div className="min-h-screen bg-gray-50 py-8">
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -44,6 +48,12 @@ export default function AboutBlog(){
                         </div>
                     </div>
                 </div>
+
+                {/* <Script src="https://www.googletagmanager.com/gtag/js?id=TEST-ID"
+                strategy="afterInteractive"
+                 onLoad={()=>console.log("Loading...")}
+                 onError={(e)=>console.log("Message:", e)}
+                /> */}
             </div>
         </div>
     )

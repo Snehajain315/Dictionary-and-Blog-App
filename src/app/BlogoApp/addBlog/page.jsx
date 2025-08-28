@@ -7,16 +7,22 @@ export default function AddBlog(){
 
      const [blog, setBlog]= useState({id:Date.now(),title:"", desc:""})
      const [data, setData]= useState([])
+ 
 
-
-    //  useEffect(()=>{
-    //   console.log(data)
-    //  })
+    useEffect(()=>{
+        const savedBlogs = localStorage.getItem("blog");
+        if (savedBlogs){
+        setBlog(JSON.parse(savedBlogs));
+        }
+    },[])
 
     
      useEffect(()=>{
+        if(data.length > 0){
         localStorage.setItem('blog', JSON.stringify(data))
+        }
      },[data])
+
 
      const handleChange=(e)=>{
        setBlog({
@@ -27,7 +33,9 @@ export default function AddBlog(){
     
      const handleSubmit=(event)=>{
        event.preventDefault();
-       setData([...data, blog])
+       const newBlog={id: Date.now(),...blog}
+       setData([...data, newBlog])
+
       setBlog({title:"", desc:""})
      }
 
@@ -40,7 +48,7 @@ export default function AddBlog(){
                         Add New Blog
                     </h1>
                     
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    <form className="space-y-6">
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-2">
                                 Blog Title:
