@@ -4,7 +4,7 @@ import { use } from "react";
 
 export default function ClientSideComponent({data}){
   const users= data
-
+  console.log(users)
   return(
     <div>
       <h1>This is a client page</h1>

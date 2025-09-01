@@ -7,7 +7,7 @@ import { Suspense } from "react";
 export default function Component(){
     return(
         <div>  
-            <AddPostClient/>
+            {/* <AddPostClient/> */}
             <Suspense fallback={<div>Loading...</div>}>
             <ServerSideComponent/>
             </Suspense>

@@ -1,0 +1,177 @@
+// 1. CSR (Client-Side Rendering):- Everything runs in the browser (like normal React). Page loads first → data fetched later.
+//⚡ Fast build, but user sees a loading state until data arrives.
+
+// Used when: Data is personalized, real-time, or only needed on the client.
+// Example:
+
+/* "use client"
+import { useEffect, useState } from "react";
+export default function Movies() {
+  const [movies, setMovies] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/movies")
+      .then(res => res.json())
+      .then(data => setMovies(data));
+  }, []);
+
+  return (
+    <div>
+      <h1>Client Side Movies</h1>
+      {movies.length === 0 ? <p>Loading...</p> : movies.map(m => <p key={m.id}>{m.title}</p>)}
+    </div>
+  );
+ }*/
+// 📌 Data is fetched after page load.
+
+//--------------------------------------------------------------------------------------------------------------
+
+// 🔹 2. SSR (Server-Side Rendering):-  Page is generated on every request by the server, then sent to the browser.
+// SEO friendly, fresh data.
+
+// Used when: Data changes frequently (like stock price, weather).
+// Example (pages router):
+
+// export async function getServerSideProps() {
+//   const res = await fetch("https://api.example.com/posts");
+//   const posts = await res.json();
+//   return { props: { posts } };
+// }
+
+// export default function Blog({ posts }) {
+//   return (
+//     <div>
+//       <h1>Server Side Blog</h1>
+//       {posts.map(post => <p key={post.id}>{post.title}</p>)}
+//     </div>
+//   );
+// }
+// 📌 Runs every time user visits the page.
+
+//--------------------------------------------------------------------------------------------------------------
+
+// 🔹 3. SSG (Static Site Generation):-  Page is built once at build time → served as static HTML.
+// Super fast 🚀, but data doesn’t change until you rebuild.
+
+// Used when: Content is static (like “About Us”, blog posts that rarely change).
+
+// Example (pages router):
+
+// export async function getStaticProps() {
+//   const res = await fetch("https://api.example.com/products");
+//   const products = await res.json();
+
+//   return { props: { products } };
+// }
+
+// export default function Shop({ products }) {
+//   return (
+//     <div>
+//       <h1>Static Shop Page</h1>
+//       {products.map(p => <p key={p.id}>{p.name}</p>)}
+//     </div>
+//   );
+// }
+// 📌 Built once at build time, same for all users.
+
+//--------------------------------------------------------------------------------------------------------------
+
+// 🔹 4. ISR (Incremental Static Regeneration):-  A mix of SSG + SSR. Page builds once, but can refresh automatically after a set time.
+
+// Best for content that updates sometimes (like blogs, product listings).
+// Balance between performance & freshness.
+
+// Example (pages router):
+/*export async function getStaticProps() {
+  const res = await fetch("https://api.example.com/news");
+  const news = await res.json();
+
+  return {
+    props: { news },
+    revalidate: 60, // page regenerates every 60s
+  };
+}
+export default function News({ news }) {
+  return (
+    <div>
+      <h1>News (ISR)</h1>
+      {news.map(n => <p key={n.id}>{n.title}</p>)}
+    </div>
+  );
+  } */
+// 📌 Cached static page refreshes every 60 seconds.
+
+//--------------------------------------------------------------------------------------------------------------
+
+/*Instead, the rendering mode is controlled by how/where you fetch data and by using options like cache or revalidate.
+Let me show you SSR vs SSG inside the app/ router */
+
+// 🟢 SSR (Server-Side Rendering in app router):-  Default for async fetch in a Server Component.
+// Runs on every request.
+
+/*app/blog/page.js
+export default async function Blog() {
+
+  // 👇 By default fetch is SSR (no cache)
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    cache: "no-store" // ensures SSR
+  });
+  const posts = await res.json();
+
+  return (
+    <div>
+      <h1>Blog (SSR)</h1>
+      {posts.map((p) => (
+        <p key={p.id}>{p.title}</p>
+      ))}
+    </div>
+  );
+ }  */
+// 👉 This will fetch fresh data on every request, just like getServerSideProps.
+
+//--------------------------------------------------------------------------------------------------------------
+
+// 🟡 SSG (Static Site Generation in app router):- Happens if you fetch with the default (force-cache) or set revalidate: false.
+// Data is fetched at build time and reused for all users.
+
+/* app/shop/page.js
+export default async function Shop() {
+
+  // 👇 Default fetch is SSG (cached at build time)
+  const res = await fetch("https://jsonplaceholder.typicode.com/products", {
+    cache: "force-cache" // or simply omit this line
+  });
+  const products = await res.json();
+
+  return (
+    <div>
+      <h1>Shop (SSG)</h1>
+      {products.map((p) => (
+        <p key={p.id}>{p.name}</p>
+      ))}
+    </div>
+  );
+   }*/
+// 👉 This will only run once at build time, same as getStaticProps.
+
+//--------------------------------------------------------------------------------------------------------------
+
+// 🔵 ISR (Incremental Static Regeneration in app router):- Use next: { revalidate: X } with fetch.
+
+/* app/news/page.js
+export default async function News() {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts", {
+    next: { revalidate: 60 }, // regenerate every 60s
+  });
+  const news = await res.json();
+
+  return (
+    <div>
+      <h1>News (ISR)</h1>
+      {news.map((n) => (
+        <p key={n.id}>{n.title}</p>
+      ))}
+    </div>
+  );
+   } */
+// 👉 This is like SSG + auto-refresh.

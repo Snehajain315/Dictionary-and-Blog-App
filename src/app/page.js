@@ -6,16 +6,16 @@ import { redirect } from "next/navigation"
 export default function RootPage(){
 
      //redirect("/BlogoApp")                          //Uncomment this to seee blogo app
-     redirect("/MovieFinder")
+    //  redirect("/MovieFinder")
 
     //When we want to see dictionary app than uncomment it and comment redirect
-    // return(
+     return(
     //     <div>
     //         {/* Client side component and server side component Practice */}
-    //         <Component/>
+            <Component/>
 
     //         {/* Uncomment Home to see DictionaryApp  */}
-    //         {/* <Home/> */}
+            //   <Home/>
     //     </div>
-    // )
+    )
 }
