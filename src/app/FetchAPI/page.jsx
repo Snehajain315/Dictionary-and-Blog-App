@@ -8,9 +8,9 @@ export default function Component(){
     return(
         <div>  
             <AddPostClient/>
-            {/* <Suspense fallback={<div>Loading...</div>}>
+            <Suspense fallback={<div>Loading...</div>}>
             <ServerSideComponent/>
-            </Suspense> */}
+            </Suspense>
           
         </div>
     )
